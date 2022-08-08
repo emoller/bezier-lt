@@ -3,7 +3,9 @@
   <head>
     <link rel="stylesheet" href="styles.css" />
     <script src="colors.js"></script>
+    <script src="points.js"></script>
   </head>
+  <canvas></canvas>
   <div class="info" id="infobox3" style="display: box">
     P'(t)=<br />
     <span style="color: #0a98d8">P0</span> * (-3t<sup>2</sup>+6t-3) +<br />
@@ -13,8 +15,33 @@
     <span style="color: #0f7373">P3</span> * (3t<sup>2</sup>)
   </div>
   <script>
+    var drawCanvas = (t) => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      drawPoint(P0.x, P0.y, clightblue, "P0");
+      drawPoint(P1.x, P1.y, clightgreen, "P1");
+      drawPoint(P2.x, P2.y, clightpurple, "P2");
+      drawPoint(P3.x, P3.y, clightaqua, "P3");
+      drawLine(P0.x, P0.y, P1.x, P1.y, clightblue, clightgreen);
+      drawLine(P2.x, P2.y, P3.x, P3.y, clightpurple, clightaqua);
+
+      context.strokeStyle = "white";
+      context.beginPath();
+      context.moveTo(rX(P0.x), rY(P0.y));
+      context.bezierCurveTo(
+        rX(P1.x),
+        rY(P1.y),
+        rX(P2.x),
+        rY(P2.y),
+        rX(P3.x),
+        rY(P3.y)
+      );
+      context.stroke();
+    };
+
     window.addEventListener("keypress", () => {
       window.location.href = "./tangent.html";
     });
   </script>
+  <script src="helpers.js"></script>
 </html>

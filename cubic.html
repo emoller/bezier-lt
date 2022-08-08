@@ -18,17 +18,25 @@
     />
   </div>
   <div class="info" id="infobox" style="display: none">
-    P(t)=lerp(<br />lerp(lerp(<span style="color: #0a98d8">P0</span>,
-    <span style="color: #d3e549">P1</span>, t), lerp(<span
+    P(<span style="color: #f07508">t</span>)=lerp(<br />lerp(lerp(<span
+      style="color: #0a98d8"
+      >P<sub>0</sub></span
+    >, <span style="color: #d3e549">P<sub>1</sub></span
+    >, <span style="color: #f07508">t</span>), lerp(<span style="color: #d3e549"
+      >P<sub>1</sub></span
+    >, <span style="color: #981e82">P<sub>2</sub></span
+    >, <span style="color: #f07508">t</span>),
+    <span style="color: #f07508">t</span>),<br />lerp(lerp(<span
       style="color: #d3e549"
-      >P1</span
-    >, <span style="color: #981e82">P2</span>, t), t),<br />lerp(lerp(<span
-      style="color: #d3e549"
-      >P1</span
-    >, <span style="color: #981e82">P2</span>, t), lerp(<span
-      style="color: #981e82"
-      >P2</span
-    >, <span style="color: #0f7373">P3</span>, t), t),<br />t)
+      >P<sub>1</sub></span
+    >, <span style="color: #981e82">P<sub>2</sub></span
+    >, <span style="color: #f07508">t</span>), lerp(<span style="color: #981e82"
+      >P<sub>2</sub></span
+    >, <span style="color: #0f7373">P<sub>3</sub></span
+    >, <span style="color: #f07508">t</span>),
+    <span style="color: #f07508">t</span>),<br /><span style="color: #f07508"
+      >t</span
+    >)
   </div>
   <script>
     var step = 0;
@@ -151,6 +159,21 @@
           rY(P3.y)
         );
         context.stroke();
+
+        drawPoint(
+          lerp(
+            lerp(lerp(P0.x, P1.x, t), lerp(P1.x, P2.x, t), t),
+            lerp(lerp(P1.x, P2.x, t), lerp(P2.x, P3.x, t), t),
+            t
+          ),
+          lerp(
+            lerp(lerp(P0.y, P1.y, t), lerp(P1.y, P2.y, t), t),
+            lerp(lerp(P1.y, P2.y, t), lerp(P2.y, P3.y, t), t),
+            t
+          ),
+          "white",
+          "S"
+        );
       }
     };
 

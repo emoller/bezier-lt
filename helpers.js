@@ -14,9 +14,15 @@ var drawPoint = (x, y, col, lbl) => {
   context.beginPath();
   context.arc(rX(x), rY(y), 10, 0, 2 * Math.PI);
   context.stroke();
-  context.fillStyle = col;
-  context.font = "20px Verdana";
-  context.fillText(lbl, rX(x) + 20, rY(y));
+  if (lbl.length) {
+    context.fillStyle = col;
+    context.font = "20px Verdana";
+    context.fillText(lbl[0], rX(x) + 20, rY(y));
+    if (lbl.length > 1) {
+      context.font = "15px Verdana";
+      context.fillText(lbl[1], rX(x) + (lbl[0] == "P" ? 30 : 35), rY(y) + 5);
+    }
+  }
 };
 
 var drawLine = (x0, y0, x1, y1, c0, c1) => {
@@ -31,6 +37,24 @@ var drawLine = (x0, y0, x1, y1, c0, c1) => {
   context.beginPath();
   context.moveTo(rX(x0), rY(y0));
   context.lineTo(rX(x1), rY(y1));
+  context.stroke();
+};
+
+var drawBBox = (points, col) => {
+  if (points.length == 0) return;
+  var minX = points[0].x;
+  var maxX = points[0].x;
+  var minY = points[0].y;
+  var maxY = points[0].y;
+  points.forEach((p) => {
+    minX = Math.min(minX, p.x);
+    maxX = Math.max(maxX, p.x);
+    minY = Math.min(minY, p.y);
+    maxY = Math.max(maxY, p.y);
+  });
+  context.strokeStyle = col;
+  context.beginPath();
+  context.rect(rX(minX), rY(minY), rX(maxX) - rX(minX), rY(maxY) - rY(minY));
   context.stroke();
 };
 

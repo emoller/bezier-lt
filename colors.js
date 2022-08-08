@@ -4,6 +4,7 @@ const cblue = "#214aa7";
 const caqua = "#14465a";
 const cpurple = "#47125c";
 const cred = "#b52d1b";
+const coreange = "#f07508";
 const clightblue = "#0a98d8";
 const clightgreen = "#d3e549";
 const clightaqua = "#0f7373";

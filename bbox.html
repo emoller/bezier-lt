@@ -11,17 +11,6 @@
     <script src="points.js"></script>
   </head>
   <canvas></canvas>
-  <div class="slidecontainer">
-    <div class="tvaluetext" id="sliderlabel"></div>
-    <input
-      type="range"
-      min="0"
-      max="100"
-      value="0"
-      class="slider"
-      id="tvalue"
-    />
-  </div>
   <div class="info" id="infobox1" style="display: none">
     P'(t)=<br />
     <span style="color: #0a98d8">P0</span> * (-3t<sup>2</sup>+6t-3) +<br />
@@ -45,7 +34,7 @@
       >P1</span
     >
   </div>
-  <div class="info" id="infobox3" style="display: box">
+  <div class="info" id="infobox3" style="display: none">
     <div>
       a=-3<span style="color: #0a98d8">P0</span>+9<span style="color: #d3e549"
         >P1</span
@@ -80,6 +69,9 @@
 
   <script>
     var step = 0;
+    var infobox = document.getElementById("infobox1");
+    var infobox2 = document.getElementById("infobox2");
+    var infobox3 = document.getElementById("infobox3");
 
     var drawCanvas = (t) => {
       context.clearRect(0, 0, canvas.width, canvas.height);
@@ -104,50 +96,57 @@
       );
       context.stroke();
 
-      var sx = lerp(
-        lerp(lerp(P0.x, P1.x, t), lerp(P1.x, P2.x, t), t),
-        lerp(lerp(P1.x, P2.x, t), lerp(P2.x, P3.x, t), t),
-        t
-      );
-      var sy = lerp(
-        lerp(lerp(P0.y, P1.y, t), lerp(P1.y, P2.y, t), t),
-        lerp(lerp(P1.y, P2.y, t), lerp(P2.y, P3.y, t), t),
-        t
-      );
-      drawPoint(sx, sy, "white", "S");
+      if (step == 1) {
+        drawBBox([P0, P1, P2, P3], "white");
+      } else if (step >= 2) {
+        var extrema = [];
+        var axes = ["x", "y"];
+        axes.forEach((axis) => {
+          var a = -3 * P0[axis] + 9 * P1[axis] - 9 * P2[axis] + 3 * P3[axis];
+          var b = 6 * P0[axis] - 12 * P1[axis] + 6 * P2[axis];
+          var c = -3 * P0[axis] + 3 * P1[axis];
+          extrema.push((-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a));
+          extrema.push((-b - Math.sqrt(b * b - 4 * a * c)) / (2 * a));
+        });
 
-      var extrema = [];
-      var axes = ["x", "y"];
-      axes.forEach((axis) => {
-        var a = -3 * P0[axis] + 9 * P1[axis] - 9 * P2[axis] + 3 * P3[axis];
-        var b = 6 * P0[axis] - 12 * P1[axis] + 6 * P2[axis];
-        var c = -3 * P0[axis] + 3 * P1[axis];
-        extrema.push((-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a));
-        extrema.push((-b - Math.sqrt(b * b - 4 * a * c)) / (2 * a));
-      });
+        extrema = extrema
+          .filter((t) => t >= 0 && t <= 1)
+          .map((t) => ({
+            x: lerp(
+              lerp(lerp(P0.x, P1.x, t), lerp(P1.x, P2.x, t), t),
+              lerp(lerp(P1.x, P2.x, t), lerp(P2.x, P3.x, t), t),
+              t
+            ),
+            y: lerp(
+              lerp(lerp(P0.y, P1.y, t), lerp(P1.y, P2.y, t), t),
+              lerp(lerp(P1.y, P2.y, t), lerp(P2.y, P3.y, t), t),
+              t
+            ),
+          }));
+        extrema.forEach((p) => drawPoint(p.x, p.y, cyellow, ""));
 
-      extrema = extrema
-        .filter((t) => t >= 0 && t <= 1)
-        .map((t) => ({
-          x: lerp(
-            lerp(lerp(P0.x, P1.x, t), lerp(P1.x, P2.x, t), t),
-            lerp(lerp(P1.x, P2.x, t), lerp(P2.x, P3.x, t), t),
-            t
-          ),
-          y: lerp(
-            lerp(lerp(P0.y, P1.y, t), lerp(P1.y, P2.y, t), t),
-            lerp(lerp(P1.y, P2.y, t), lerp(P2.y, P3.y, t), t),
-            t
-          ),
-        }));
-      extrema.forEach((p) => drawPoint(p.x, p.y, cred, ""));
+        if (step > 5) {
+          drawBBox([P0, P3, ...extrema], "white");
+        }
+      }
     };
 
     window.addEventListener("keypress", (e) => {
       step++;
       e.preventDefault();
+      drawCanvas(0);
 
-      window.location.href = "./arclen.html";
+      if (step == 3) {
+        infobox1.style.display = "block";
+      } else if (step == 4) {
+        infobox1.style.display = "none";
+        infobox2.style.display = "block";
+      } else if (step == 5) {
+        infobox2.style.display = "none";
+        infobox3.style.display = "block";
+      } else if (step == 7) {
+        window.location.href = "./arclen.html";
+      }
     });
   </script>
   <script src="helpers.js"></script>

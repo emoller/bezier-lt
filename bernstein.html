@@ -3,33 +3,71 @@
   <head>
     <link rel="stylesheet" href="styles.css" />
     <script src="colors.js"></script>
+    <script src="points.js"></script>
   </head>
+  <canvas></canvas>
   <div class="info" id="infobox" style="display: block">
-    P(t) = lerp(<br />lerp(lerp(<span style="color: #0a98d8">P0</span>,
-    <span style="color: #d3e549">P1</span>, t), lerp(<span
+    P(<span style="color: #f07508">t</span>)=lerp(<br />lerp(lerp(<span
+      style="color: #0a98d8"
+      >P<sub>0</sub></span
+    >, <span style="color: #d3e549">P<sub>1</sub></span
+    >, <span style="color: #f07508">t</span>), lerp(<span style="color: #d3e549"
+      >P<sub>1</sub></span
+    >, <span style="color: #981e82">P<sub>2</sub></span
+    >, <span style="color: #f07508">t</span>),
+    <span style="color: #f07508">t</span>),<br />lerp(lerp(<span
       style="color: #d3e549"
-      >P1</span
-    >, <span style="color: #981e82">P2</span>, t), t),<br />lerp(lerp(<span
-      style="color: #d3e549"
-      >P1</span
-    >, <span style="color: #981e82">P2</span>, t), lerp(<span
-      style="color: #981e82"
-      >P2</span
-    >, <span style="color: #0f7373">P3</span>, t), t),<br />t)
+      >P<sub>1</sub></span
+    >, <span style="color: #981e82">P<sub>2</sub></span
+    >, <span style="color: #f07508">t</span>), lerp(<span style="color: #981e82"
+      >P<sub>2</sub></span
+    >, <span style="color: #0f7373">P<sub>3</sub></span
+    >, <span style="color: #f07508">t</span>),
+    <span style="color: #f07508">t</span>),<br /><span style="color: #f07508"
+      >t</span
+    >)
   </div>
   <div class="info" id="infobox2" style="display: none">
-    P(t)=<br />
-    <span style="color: #0a98d8">P0</span> *
-    (-t<sup>3</sup>+3t<sup>2</sup>-3t+1) +<br />
-    <span style="color: #d3e549">P1</span> * (3t<sup>3</sup>-6t<sup>2</sup>+3t)
-    + <br />
-    <span style="color: #981e82">P2</span> * (-3t<sup>3</sup>+3t<sup>2</sup>) +
+    P(<span style="color: #f07508">t</span>)=<br />
+    <span style="color: #0a98d8">P<sub>0</sub></span> * (-<span
+      style="color: #f07508"
+      >t<sup>3</sup></span
+    >+3<span style="color: #f07508">t<sup>2</sup></span
+    >-3t+1) +<br />
+    <span style="color: #d3e549">P<sub>1</sub></span> *
+    (3t<sup>3</sup>-6t<sup>2</sup>+3t) + <br />
+    <span style="color: #981e82">P<sub>2</sub></span> *
+    (-3t<sup>3</sup>+3t<sup>2</sup>) +
     <br />
-    <span style="color: #0f7373">P3</span> * (t<sup>3</sup>)
+    <span style="color: #0f7373">P<sub>3</sub></span> * (t<sup>3</sup>)
   </div>
 
   <script>
     var step = 0;
+
+    var drawCanvas = (t) => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      drawPoint(P0.x, P0.y, clightblue, "P0");
+      drawPoint(P1.x, P1.y, clightgreen, "P1");
+      drawPoint(P2.x, P2.y, clightpurple, "P2");
+      drawPoint(P3.x, P3.y, clightaqua, "P3");
+      drawLine(P0.x, P0.y, P1.x, P1.y, clightblue, clightgreen);
+      drawLine(P2.x, P2.y, P3.x, P3.y, clightpurple, clightaqua);
+
+      context.strokeStyle = "white";
+      context.beginPath();
+      context.moveTo(rX(P0.x), rY(P0.y));
+      context.bezierCurveTo(
+        rX(P1.x),
+        rY(P1.y),
+        rX(P2.x),
+        rY(P2.y),
+        rX(P3.x),
+        rY(P3.y)
+      );
+      context.stroke();
+    };
 
     window.addEventListener("keypress", () => {
       step++;
@@ -43,4 +81,5 @@
       }
     });
   </script>
+  <script src="helpers.js"></script>
 </html>
