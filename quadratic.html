@@ -3,6 +3,7 @@
   <head>
     <link rel="stylesheet" href="styles.css" />
     <script src="colors.js"></script>
+    <script src="points.js"></script>
   </head>
   <canvas></canvas>
   <div class="slidecontainer">
@@ -20,9 +21,6 @@
     De Casteljeu's Algorithm
   </div>
   <script>
-    const P0 = { x: 0.0, y: 0.2 };
-    const P1 = { x: 0.6, y: 1.0 };
-    const P2 = { x: 1.0, y: 0.0 };
     var step = 0;
 
     var drawCanvas = (t) => {

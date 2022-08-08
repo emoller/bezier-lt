@@ -3,6 +3,7 @@
   <head>
     <link rel="stylesheet" href="styles.css" />
     <script src="colors.js"></script>
+    <script src="points.js"></script>
   </head>
   <canvas></canvas>
   <div class="slidecontainer">
@@ -23,10 +24,6 @@
     <span style="color: #fff23b">P1</span>;
   </div>
   <script>
-    const P0 = { x: 0.0, y: 0.2 };
-    const P1 = { x: 0.6, y: 1.0 };
-    const P2 = { x: 1.0, y: 0.0 };
-
     var drawCanvas = (t) => {
       context.clearRect(0, 0, canvas.width, canvas.height);
       drawLine(P0.x, P0.y, P1.x, P1.y, clightblue, clightgreen);
