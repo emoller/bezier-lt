@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="colors.js"></script>
+  </head>
+  <canvas></canvas>
+  <div class="slidecontainer">
+    <div class="tvaluetext" id="sliderlabel"></div>
+    <input
+      type="range"
+      min="0"
+      max="100"
+      value="0"
+      class="slider"
+      id="tvalue"
+    />
+  </div>
+  <div class="info" id="infobox" style="display: none">
+    lerp = (<span style="color: #0a98d8">P0</span>,
+    <span style="color: #fff23b">P1</span>, t) => (1 - t) *
+    <span style="color: #0a98d8">P0</span> + t *
+    <span style="color: #fff23b">P1</span>;
+  </div>
+  <script>
+    const P0 = { x: 0.0, y: 0.2 };
+    const P1 = { x: 0.6, y: 1.0 };
+    const P2 = { x: 1.0, y: 0.0 };
+
+    var drawCanvas = (t) => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      drawLine(P0.x, P0.y, P1.x, P1.y, clightblue, clightgreen);
+      drawPoint(P0.x, P0.y, clightblue, "P0");
+      drawPoint(P1.x, P1.y, clightgreen, "P1");
+      drawPoint(lerp(P0.x, P1.x, t), lerp(P0.y, P1.y, t), cyellow, "Q");
+    };
+  </script>
+  <script src="helpers.js"></script>
+  <script>
+    window.addEventListener("keypress", (e) => {
+      e.preventDefault();
+      var infobox = document.getElementById("infobox");
+      if (infobox.style.display == "none") {
+        infobox.style.display = "block";
+      } else {
+        window.location.href = "./quadratic.html";
+      }
+    });
+  </script>
+</html>

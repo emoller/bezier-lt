@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="colors.js"></script>
+  </head>
+  <canvas></canvas>
+  <div class="slidecontainer">
+    <div class="tvaluetext" id="sliderlabel"></div>
+    <input
+      type="range"
+      min="0"
+      max="100"
+      value="0"
+      class="slider"
+      id="tvalue"
+    />
+  </div>
+  <div class="info" id="infobox1" style="display: none">
+    P'(t)=<br />
+    <span style="color: #0a98d8">P0</span> * (-3t<sup>2</sup>+6t-3) +<br />
+    <span style="color: #d3e549">P1</span> * (9t<sup>2</sup>-12t+3) + <br />
+    <span style="color: #981e82">P2</span> * (-9t<sup>2</sup>+6t) +
+    <br />
+    <span style="color: #0f7373">P3</span> * (3t<sup>2</sup>)
+  </div>
+  <div class="info" id="infobox2" style="display: none">
+    P'(t)=<br />
+    t<sup>2</sup> * (-3<span style="color: #0a98d8">P0</span>+9<span
+      style="color: #d3e549"
+      >P1</span
+    >-9<span style="color: #981e82">P2</span>+3<span style="color: #0f7373"
+      >P3</span
+    >) +<br />
+    t * (6<span style="color: #0a98d8">P0</span>-12<span style="color: #d3e549"
+      >P1</span
+    >+6<span style="color: #981e82">P2</span>) +<br />
+    -3<span style="color: #0a98d8">P0</span>+3<span style="color: #d3e549"
+      >P1</span
+    >
+  </div>
+  <div class="info" id="infobox3" style="display: box">
+    <div>
+      a=-3<span style="color: #0a98d8">P0</span>+9<span style="color: #d3e549"
+        >P1</span
+      >-9<span style="color: #981e82">P2</span>+3<span style="color: #0f7373"
+        >P3</span
+      ><br />
+      b=6<span style="color: #0a98d8">P0</span>-12<span style="color: #d3e549"
+        >P1</span
+      >+6<span style="color: #981e82">P2</span><br />
+      c=-3<span style="color: #0a98d8">P0</span>+3<span style="color: #d3e549"
+        >P1</span
+      >
+    </div>
+    <math display="block">
+      <mrow>
+        <mi>t</mi><mo>=</mo>
+        <mfrac>
+          <mrow
+            ><mo>&#x2212;</mo><mi>b</mi><mo>&#x00B1;</mo>
+            <msqrt>
+              <mrow>
+                <msup><mi>b</mi><mn>2</mn></msup
+                ><mo>&#x2212;</mo><mn>4</mn><mi>a</mi><mi>c</mi>
+              </mrow>
+            </msqrt>
+          </mrow>
+          <mrow> <mn>2</mn><mi>a</mi> </mrow>
+        </mfrac>
+      </mrow>
+    </math>
+  </div>
+
+  <script>
+    const P0 = { x: 0.0, y: 0.2 };
+    const P1 = { x: 0.4, y: 1.0 };
+    const P2 = { x: 1.0, y: 0.0 };
+    const P3 = { x: 0.8, y: 0.9 };
+    var step = 0;
+
+    var drawCanvas = (t) => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      drawPoint(P0.x, P0.y, clightblue, "P0");
+      drawPoint(P1.x, P1.y, clightgreen, "P1");
+      drawPoint(P2.x, P2.y, clightpurple, "P2");
+      drawPoint(P3.x, P3.y, clightaqua, "P3");
+      drawLine(P0.x, P0.y, P1.x, P1.y, clightblue, clightgreen);
+      drawLine(P2.x, P2.y, P3.x, P3.y, clightpurple, clightaqua);
+
+      context.strokeStyle = "white";
+      context.beginPath();
+      context.moveTo(rX(P0.x), rY(P0.y));
+      context.bezierCurveTo(
+        rX(P1.x),
+        rY(P1.y),
+        rX(P2.x),
+        rY(P2.y),
+        rX(P3.x),
+        rY(P3.y)
+      );
+      context.stroke();
+
+      var sx = lerp(
+        lerp(lerp(P0.x, P1.x, t), lerp(P1.x, P2.x, t), t),
+        lerp(lerp(P1.x, P2.x, t), lerp(P2.x, P3.x, t), t),
+        t
+      );
+      var sy = lerp(
+        lerp(lerp(P0.y, P1.y, t), lerp(P1.y, P2.y, t), t),
+        lerp(lerp(P1.y, P2.y, t), lerp(P2.y, P3.y, t), t),
+        t
+      );
+      drawPoint(sx, sy, "white", "S");
+
+      var extrema = [];
+      var axes = ["x", "y"];
+      axes.forEach((axis) => {
+        var a = -3 * P0[axis] + 9 * P1[axis] - 9 * P2[axis] + 3 * P3[axis];
+        var b = 6 * P0[axis] - 12 * P1[axis] + 6 * P2[axis];
+        var c = -3 * P0[axis] + 3 * P1[axis];
+        extrema.push((-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a));
+        extrema.push((-b - Math.sqrt(b * b - 4 * a * c)) / (2 * a));
+      });
+
+      extrema = extrema
+        .filter((t) => t >= 0 && t <= 1)
+        .map((t) => ({
+          x: lerp(
+            lerp(lerp(P0.x, P1.x, t), lerp(P1.x, P2.x, t), t),
+            lerp(lerp(P1.x, P2.x, t), lerp(P2.x, P3.x, t), t),
+            t
+          ),
+          y: lerp(
+            lerp(lerp(P0.y, P1.y, t), lerp(P1.y, P2.y, t), t),
+            lerp(lerp(P1.y, P2.y, t), lerp(P2.y, P3.y, t), t),
+            t
+          ),
+        }));
+      extrema.forEach((p) => drawPoint(p.x, p.y, cred, ""));
+    };
+
+    window.addEventListener("keypress", (e) => {
+      step++;
+      e.preventDefault();
+
+      window.location.href = "./arclen.html";
+    });
+  </script>
+  <script src="helpers.js"></script>
+</html>

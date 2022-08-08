@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="colors.js"></script>
+  </head>
+  <div class="info" id="infobox" style="display: block">
+    P(t) = lerp(<br />lerp(lerp(<span style="color: #0a98d8">P0</span>,
+    <span style="color: #d3e549">P1</span>, t), lerp(<span
+      style="color: #d3e549"
+      >P1</span
+    >, <span style="color: #981e82">P2</span>, t), t),<br />lerp(lerp(<span
+      style="color: #d3e549"
+      >P1</span
+    >, <span style="color: #981e82">P2</span>, t), lerp(<span
+      style="color: #981e82"
+      >P2</span
+    >, <span style="color: #0f7373">P3</span>, t), t),<br />t)
+  </div>
+  <div class="info" id="infobox2" style="display: none">
+    P(t)=<br />
+    <span style="color: #0a98d8">P0</span> *
+    (-t<sup>3</sup>+3t<sup>2</sup>-3t+1) +<br />
+    <span style="color: #d3e549">P1</span> * (3t<sup>3</sup>-6t<sup>2</sup>+3t)
+    + <br />
+    <span style="color: #981e82">P2</span> * (-3t<sup>3</sup>+3t<sup>2</sup>) +
+    <br />
+    <span style="color: #0f7373">P3</span> * (t<sup>3</sup>)
+  </div>
+
+  <script>
+    var step = 0;
+
+    window.addEventListener("keypress", () => {
+      step++;
+      var infobox = document.getElementById("infobox");
+      var infobox2 = document.getElementById("infobox2");
+      if (step == 1) {
+        infobox.style.display = "none";
+        infobox2.style.display = "block";
+      } else {
+        window.location.href = "./derivative.html";
+      }
+    });
+  </script>
+</html>

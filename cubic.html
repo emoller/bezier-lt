@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="colors.js"></script>
+  </head>
+  <canvas></canvas>
+  <div class="slidecontainer">
+    <div class="tvaluetext" id="sliderlabel"></div>
+    <input
+      type="range"
+      min="0"
+      max="100"
+      value="0"
+      class="slider"
+      id="tvalue"
+    />
+  </div>
+  <div class="info" id="infobox" style="display: none">
+    P(t)=lerp(<br />lerp(lerp(<span style="color: #0a98d8">P0</span>,
+    <span style="color: #d3e549">P1</span>, t), lerp(<span
+      style="color: #d3e549"
+      >P1</span
+    >, <span style="color: #981e82">P2</span>, t), t),<br />lerp(lerp(<span
+      style="color: #d3e549"
+      >P1</span
+    >, <span style="color: #981e82">P2</span>, t), lerp(<span
+      style="color: #981e82"
+      >P2</span
+    >, <span style="color: #0f7373">P3</span>, t), t),<br />t)
+  </div>
+  <script>
+    const P0 = { x: 0.0, y: 0.2 };
+    const P1 = { x: 0.4, y: 1.0 };
+    const P2 = { x: 0.9, y: 0.0 };
+    const P3 = { x: 1.0, y: 0.9 };
+    var step = 0;
+
+    var drawCanvas = (t) => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      if (step < 3) {
+        drawLine(P0.x, P0.y, P1.x, P1.y, clightblue, clightgreen);
+        drawPoint(P0.x, P0.y, clightblue, "P0");
+        drawPoint(P1.x, P1.y, clightgreen, "P1");
+        drawPoint(lerp(P0.x, P1.x, t), lerp(P0.y, P1.y, t), cyellow, "Q0");
+
+        drawLine(P1.x, P1.y, P2.x, P2.y, clightgreen, clightpurple);
+        drawPoint(P2.x, P2.y, clightpurple, "P2");
+        drawPoint(lerp(P1.x, P2.x, t), lerp(P1.y, P2.y, t), cyellow, "Q1");
+
+        drawLine(P2.x, P2.y, P3.x, P3.y, clightpurple, clightaqua);
+        drawPoint(P3.x, P3.y, clightaqua, "P3");
+        drawPoint(lerp(P2.x, P3.x, t), lerp(P2.y, P3.y, t), cyellow, "Q2");
+
+        if (step > 0) {
+          drawLine(
+            lerp(P0.x, P1.x, t),
+            lerp(P0.y, P1.y, t),
+            lerp(P1.x, P2.x, t),
+            lerp(P1.y, P2.y, t),
+            cyellow,
+            cyellow
+          );
+          drawPoint(
+            lerp(lerp(P0.x, P1.x, t), lerp(P1.x, P2.x, t), t),
+            lerp(lerp(P0.y, P1.y, t), lerp(P1.y, P2.y, t), t),
+            "white",
+            "R0"
+          );
+
+          drawLine(
+            lerp(P1.x, P2.x, t),
+            lerp(P1.y, P2.y, t),
+            lerp(P2.x, P3.x, t),
+            lerp(P2.y, P3.y, t),
+            cyellow,
+            cyellow
+          );
+          drawPoint(
+            lerp(lerp(P1.x, P2.x, t), lerp(P2.x, P3.x, t), t),
+            lerp(lerp(P1.y, P2.y, t), lerp(P2.y, P3.y, t), t),
+            "white",
+            "R1"
+          );
+
+          context.strokeStyle = clightaqua;
+          context.beginPath();
+          context.moveTo(rX(P0.x), rY(P0.y));
+          context.quadraticCurveTo(rX(P1.x), rY(P1.y), rX(P2.x), rY(P2.y));
+          context.stroke();
+
+          context.strokeStyle = clightaqua;
+          context.beginPath();
+          context.moveTo(rX(P1.x), rY(P1.y));
+          context.quadraticCurveTo(rX(P2.x), rY(P2.y), rX(P3.x), rY(P3.y));
+          context.stroke();
+        }
+
+        if (step > 1) {
+          drawLine(
+            lerp(lerp(P0.x, P1.x, t), lerp(P1.x, P2.x, t), t),
+            lerp(lerp(P0.y, P1.y, t), lerp(P1.y, P2.y, t), t),
+            lerp(lerp(P1.x, P2.x, t), lerp(P2.x, P3.x, t), t),
+            lerp(lerp(P1.y, P2.y, t), lerp(P2.y, P3.y, t), t),
+            cyellow,
+            cyellow
+          );
+
+          drawPoint(
+            lerp(
+              lerp(lerp(P0.x, P1.x, t), lerp(P1.x, P2.x, t), t),
+              lerp(lerp(P1.x, P2.x, t), lerp(P2.x, P3.x, t), t),
+              t
+            ),
+            lerp(
+              lerp(lerp(P0.y, P1.y, t), lerp(P1.y, P2.y, t), t),
+              lerp(lerp(P1.y, P2.y, t), lerp(P2.y, P3.y, t), t),
+              t
+            ),
+            "white",
+            "S"
+          );
+
+          context.strokeStyle = "white";
+          context.beginPath();
+          context.moveTo(rX(P0.x), rY(P0.y));
+          context.bezierCurveTo(
+            rX(P1.x),
+            rY(P1.y),
+            rX(P2.x),
+            rY(P2.y),
+            rX(P3.x),
+            rY(P3.y)
+          );
+          context.stroke();
+        }
+      } else {
+        drawPoint(P0.x, P0.y, clightblue, "P0");
+        drawPoint(P1.x, P1.y, clightgreen, "P1");
+        drawPoint(P2.x, P2.y, clightpurple, "P2");
+        drawPoint(P3.x, P3.y, clightaqua, "P3");
+        drawLine(P0.x, P0.y, P1.x, P1.y, clightblue, clightgreen);
+        drawLine(P2.x, P2.y, P3.x, P3.y, clightpurple, clightaqua);
+
+        context.strokeStyle = "white";
+        context.beginPath();
+        context.moveTo(rX(P0.x), rY(P0.y));
+        context.bezierCurveTo(
+          rX(P1.x),
+          rY(P1.y),
+          rX(P2.x),
+          rY(P2.y),
+          rX(P3.x),
+          rY(P3.y)
+        );
+        context.stroke();
+      }
+    };
+
+    window.addEventListener("keypress", (e) => {
+      step++;
+      e.preventDefault();
+      drawCanvas(slider.value / slider.max);
+      if (step > 3) {
+        var infobox = document.getElementById("infobox");
+        infobox.style.display = "block";
+      }
+      if (step > 4) {
+        window.location.href = "./practical.html";
+      }
+    });
+  </script>
+  <script src="helpers.js"></script>
+</html>
