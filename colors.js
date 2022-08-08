@@ -8,3 +8,5 @@ const clightblue = "#0a98d8";
 const clightgreen = "#d3e549";
 const clightaqua = "#0f7373";
 const clightpurple = "#981e82";
+
+// https://lospec.com/palette-list/fourseasons
